@@ -1,25 +1,31 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { useState, useEffect } from 'react';
 import './App.css';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import NavBarComponent from './components/NavBarComponent';
+import EventComponent from './components/EventComponent';
+import RegisterComponent from './components/RegisterComponent';
+import RootComponent from './components/RootComponent';
+import LoginComponent from './components/LoginComponent';
+import AppUser from './models/AppUser';
+import LogoutComponent from './components/LogoutComponent';
 
 function App() {
+  //@ts-ignore
+  const [authUser, setAuthUser] = useState(null as AppUser);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <Router>
+        <NavBarComponent authUser={authUser} />
+        <Switch>
+          <Route exact path='/' render={() => <RootComponent />} />
+          <Route exact path='/events' render={() => <EventComponent authUser={authUser} />} />
+          <Route exact path='/register' render={() => <RegisterComponent />} />
+          <Route exact path='/login' render={() => <LoginComponent authUser={authUser} setAuthUser={setAuthUser}/>} />
+          <Route exact path="/logout" render={() => <LogoutComponent />} />
+        </Switch>
+      </Router>
+    </>
   );
 }
 
